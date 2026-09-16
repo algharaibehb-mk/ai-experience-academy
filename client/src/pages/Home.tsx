@@ -1,117 +1,117 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
-import {
-  ArrowLeft,
-  ArrowUpLeft,
-  BrainCircuit,
-  Check,
-  ChevronDown,
-  Clock3,
-  Layers3,
-  Linkedin,
-  Menu,
-  Play,
-  Quote,
-  Send,
-  Sparkles,
-  Star,
-  Twitter,
-  Users,
-  WandSparkles,
-  X,
-  Zap,
-} from "lucide-react";
+import { useMemo, useState, type CSSProperties } from "react";
+import { Sparkles, Volume2, RotateCcw, ArrowLeft, Star, Heart, Check, X, PartyPopper } from "lucide-react";
+import { toast } from "sonner";
 
-const modules = [
-  ["01", "أساسيات التفكير الذكي", "تأسيس عملي لفهم الذكاء الاصطناعي، نماذج التفكير، وكيف تنتقل من مستخدم عادي إلى صانع قرار أذكى.", "المنظور"],
-  ["02", "فن هندسة الأوامر", "حوّل فكرتك إلى نتيجة دقيقة. تقنيات صياغة الأوامر التي تختصر الوقت وتضاعف جودة مخرجاتك.", "المهارة"],
-  ["03", "بناء نظام عملك", "اربط الأدوات، أتمت مهامك، وصمّم سير عمل قابل للتوسع يخدم عملك بدل أن يستهلك يومك.", "التطبيق"],
-  ["04", "مشروعك من الفكرة إلى الأثر", "تخرج بمشروع حقيقي يوثق خبرتك ويمنحك أفضلية ملموسة في سوق العمل وريادة الأعمال.", "الإنجاز"],
-];
+type WordCard = { word: string; emoji: string; color: string; hint: string };
 
-const faqs = [
-  ["هل أحتاج إلى خبرة تقنية سابقة؟", "أبداً. صُممت الدورة لتبدأ معك من الصفر، ثم تبني فهمك خطوة بخطوة عبر أمثلة عملية تناسب أصحاب الأعمال والمبدعين والمهنيين."],
-  ["كيف تتم الدراسة؟", "تجربة تعليمية مرنة تجمع بين دروس قصيرة مركّزة، جلسات مباشرة أسبوعية، وتحديات تطبيقية تساعدك على تحويل المعرفة إلى عادة يومية."],
-  ["هل أحصل على شهادة؟", "نعم، تحصل على شهادة إتمام رقمية موثقة بعد إنهاء الوحدات وتسليم مشروع التخرج العملي."],
-  ["ما الأدوات التي سنستخدمها؟", "سنستخدم مجموعة منتقاة من أدوات الذكاء الاصطناعي النصية والبصرية وأدوات الأتمتة، مع تحديث المحتوى كلما تغيّر المشهد التقني."],
-];
+const letters = ["ا", "ب", "ت", "ج", "ح", "خ", "د", "ذ", "ر", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"];
+const words: Record<string, WordCard[]> = {
+  ا: [{ word: "أسد", emoji: "🦁", color: "#ffc857", hint: "ملك الغابة" }, { word: "أرنب", emoji: "🐰", color: "#ff9fb2", hint: "يقفز بسرعة" }],
+  ب: [{ word: "بطة", emoji: "🦆", color: "#7bdff2", hint: "تحب الماء" }, { word: "برتقال", emoji: "🍊", color: "#ff9d4d", hint: "فاكهة برتقالية" }],
+  ت: [{ word: "تفاحة", emoji: "🍎", color: "#ff6b6b", hint: "فاكهة حمراء" }, { word: "تمساح", emoji: "🐊", color: "#7bd88f", hint: "يعيش قرب الماء" }],
+  ج: [{ word: "جمل", emoji: "🐪", color: "#e4b56a", hint: "سفينة الصحراء" }, { word: "جزر", emoji: "🥕", color: "#ff934f", hint: "يحبها الأرنب" }],
+  ح: [{ word: "حصان", emoji: "🐴", color: "#9d8cff", hint: "يجري بسرعة" }, { word: "حوت", emoji: "🐋", color: "#6fc5ff", hint: "كبير ويعيش في البحر" }],
+  خ: [{ word: "خروف", emoji: "🐑", color: "#e8e7ff", hint: "صوته مِـ..." }],
+  د: [{ word: "دب", emoji: "🐻", color: "#c78b68", hint: "يحب العسل" }, { word: "دولفين", emoji: "🐬", color: "#73d4e8", hint: "ذكي في البحر" }],
+  ذ: [{ word: "ذرة", emoji: "🌽", color: "#ffd166", hint: "حبات صفراء" }],
+  ر: [{ word: "روبوت", emoji: "🤖", color: "#95a5ff", hint: "صديق ذكي" }, { word: "رمان", emoji: "🍎", color: "#e85572", hint: "حبات حمراء" }],
+  س: [{ word: "سمكة", emoji: "🐟", color: "#65cfff", hint: "تسبح في الماء" }, { word: "سيارة", emoji: "🚗", color: "#ff7171", hint: "تسير على الطريق" }],
+  ش: [{ word: "شمس", emoji: "☀️", color: "#ffd166", hint: "تضيء النهار" }, { word: "شجرة", emoji: "🌳", color: "#69c779", hint: "لها أوراق" }],
+  ص: [{ word: "صقر", emoji: "🦅", color: "#a68b72", hint: "طائر قوي" }],
+  ع: [{ word: "عنب", emoji: "🍇", color: "#a77aff", hint: "حبات صغيرة" }, { word: "عصفور", emoji: "🐦", color: "#87d7ff", hint: "يطير في السماء" }],
+  ف: [{ word: "فراشة", emoji: "🦋", color: "#ff91c8", hint: "أجنحتها جميلة" }, { word: "فيل", emoji: "🐘", color: "#a6b4c5", hint: "حيوان ضخم" }],
+  ق: [{ word: "قمر", emoji: "🌙", color: "#c4c8ff", hint: "يظهر في الليل" }, { word: "قطة", emoji: "🐱", color: "#ffb0a5", hint: "تحب المواء" }],
+  ك: [{ word: "كتاب", emoji: "📚", color: "#8ed9d2", hint: "نقرأه" }, { word: "كلب", emoji: "🐶", color: "#e5b176", hint: "صديق وفي" }],
+  ل: [{ word: "ليمون", emoji: "🍋", color: "#e5df63", hint: "طعم حامض" }, { word: "لؤلؤة", emoji: "🦪", color: "#d3c7ff", hint: "تلمع" }],
+  م: [{ word: "موز", emoji: "🍌", color: "#ffe06c", hint: "فاكهة صفراء" }, { word: "مطر", emoji: "🌧️", color: "#89c7ff", hint: "ينزل من السماء" }],
+  ن: [{ word: "نحلة", emoji: "🐝", color: "#ffd34e", hint: "تصنع العسل" }, { word: "نجمة", emoji: "⭐", color: "#ffd166", hint: "تلمع في السماء" }],
+  ه: [{ word: "هلال", emoji: "🌙", color: "#d5d8ff", hint: "شكل القمر" }, { word: "هدية", emoji: "🎁", color: "#ff8fa3", hint: "نفرح بها" }],
+  و: [{ word: "وردة", emoji: "🌹", color: "#ff819d", hint: "رائحتها جميلة" }, { word: "وحيد القرن", emoji: "🦄", color: "#d8a1ff", hint: "حيوان خيالي" }],
+  ي: [{ word: "يد", emoji: "🖐️", color: "#ffc4a5", hint: "نكتب بها" }, { word: "يمامة", emoji: "🕊️", color: "#d9e8ff", hint: "طائر أبيض" }],
+};
+const keyboardRows = [["ا", "ب", "ت", "ث", "ج", "ح", "خ"], ["د", "ذ", "ر", "ز", "س", "ش", "ص"], ["ض", "ط", "ظ", "ع", "غ", "ف", "ق"], ["ك", "ل", "م", "ن", "ه", "و", "ي"]];
 
-function useCountUp(target: number, duration = 1300) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    const started = performance.now();
-    let frame = 0;
-    const tick = (now: number) => {
-      const progress = Math.min((now - started) / duration, 1);
-      setCount(Math.floor((1 - Math.pow(1 - progress, 3)) * target));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [target, duration]);
-  return count;
-}
+const normalizeArabic = (value: string) => value.trim().toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/ؤ/g, "و").replace(/ئ/g, "ي");
 
-function Stat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
-  return <div className="stat-item"><strong>{useCountUp(value)}{suffix}</strong><span>{label}</span></div>;
-}
-
-function ScrollLink({ href, children, onClick }: { href: string; children: ReactNode; onClick?: () => void }) {
-  return <a href={href} onClick={onClick} className="nav-link">{children}</a>;
-}
+function shuffle<T>(items: T[]) { return [...items].sort(() => Math.random() - 0.5); }
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState(0);
-  const [formSent, setFormSent] = useState(false);
-  const [email, setEmail] = useState("");
-  const [activeSection, setActiveSection] = useState("home");
-  const navItems = useMemo(() => [["home", "الرئيسية"], ["why", "لماذا الدورة"], ["journey", "الرحلة"], ["faq", "الأسئلة الشائعة"]], []);
+  const [stage, setStage] = useState<"welcome" | "game">("welcome");
+  const [name, setName] = useState("");
+  const [currentLetter, setCurrentLetter] = useState("م");
+  const [answer, setAnswer] = useState("");
+  const [score, setScore] = useState(0);
+  const [round, setRound] = useState(1);
+  const [feedback, setFeedback] = useState<"idle" | "wrong" | "success">("idle");
+  const [earnedWord, setEarnedWord] = useState<WordCard | null>(null);
+  const [balloons, setBalloons] = useState<string[]>([]);
 
-  useEffect(() => {
-    const revealObserver = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")), { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
-    const sectionObserver = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && setActiveSection(entry.target.id)), { rootMargin: "-30% 0px -55%" });
-    document.querySelectorAll("section[id]").forEach((section) => sectionObserver.observe(section));
-    return () => { revealObserver.disconnect(); sectionObserver.disconnect(); };
-  }, []);
+  const currentWords = useMemo(() => words[currentLetter] ?? [{ word: `${currentLetter}ـ...`, emoji: "✨", color: "#73e0db", hint: "أي كلمة تبدأ بهذا الحرف" }], [currentLetter]);
 
-  const closeMenu = () => setMenuOpen(false);
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (email.trim()) setFormSent(true);
+  const startGame = () => {
+    const cleanName = name.trim();
+    if (cleanName.length < 2) { toast.error("اكتب اسمك الجميل أولًا"); return; }
+    setName(cleanName); setStage("game"); setFeedback("idle");
   };
 
+  const nextRound = () => {
+    const pool = letters.filter((letter) => letter !== currentLetter);
+    setCurrentLetter(pool[Math.floor(Math.random() * pool.length)]);
+    setRound((value) => value + 1); setAnswer(""); setFeedback("idle"); setEarnedWord(null); setBalloons([]);
+  };
+
+  const checkAnswer = () => {
+    const clean = normalizeArabic(answer);
+    if (!clean) { toast.error("اكتب كلمة أولًا يا بطل"); return; }
+    const expected = currentWords.find((item) => normalizeArabic(item.word).startsWith(clean) || normalizeArabic(item.word) === clean);
+    const isCorrect = clean.startsWith(normalizeArabic(currentLetter)) && clean.length >= 2;
+    if (isCorrect) {
+      const reward = expected ?? { word: answer.trim(), emoji: "🎉", color: "#73e0db", hint: "كلمة رائعة من اختيارك" };
+      setEarnedWord(reward); setFeedback("success"); setScore((value) => value + 10); setBalloons(["🎈", "🎈", "🎈", "🎈", "🎈", "🎈"]);
+      toast.success("أحسنت! إجابة صحيحة ✨");
+    } else {
+      setFeedback("wrong"); toast("اقتربت! جرّب كلمة تبدأ بحرف " + currentLetter, { icon: "💡" });
+    }
+  };
+
+  const speak = () => { if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.speak(new SpeechSynthesisUtterance(`اكتب كلمة تبدأ بحرف ${currentLetter}`)); };
+  const addKey = (key: string) => { setAnswer((value) => value + key); setFeedback("idle"); };
+
+  if (stage === "welcome") return (
+    <main className="game-shell welcome-shell" dir="rtl">
+      <div className="sky-glow" /><div className="stars-field">✦　·　✧　　✦　·　✧　·　✦</div>
+      <section className="welcome-card glass-card">
+        <div className="brand-pill"><span className="brand-dot">✎</span><span>حُروفي</span><small>لعبة الكتابة الذكية</small></div>
+        <div className="welcome-art"><img src="/manus-storage/arabic-letter-game-mascot_5fc9c4e4.png" alt="بومة حروفي المرحة" /></div>
+        <p className="eyebrow"><Sparkles size={16} /> مغامرة الحروف تبدأ الآن</p>
+        <h1>أهلًا يا بطل!<br /><span>ما اسمك الجميل؟</span></h1>
+        <p className="welcome-copy">اكتب اسمك، ثم ساعدني في جمع نجوم الكلمات العربية.</p>
+        <div className="name-field"><span>✦</span><input autoFocus value={name} onChange={(event) => setName(event.target.value)} onKeyDown={(event) => event.key === "Enter" && startGame()} placeholder="اكتب اسمك هنا..." aria-label="اسم الطفل" /><span className="field-spark">✧</span></div>
+        <button className="primary-button" onClick={startGame}>هيا نلعب <ArrowLeft size={20} /></button>
+        <div className="welcome-footer"><span><Heart size={15} fill="currentColor" /> تعلم بالمرح</span><span>⭐ 26 حرفًا</span><span>🎈 جوائز جميلة</span></div>
+      </section>
+      <div className="floating-balloon balloon-a">🎈</div><div className="floating-balloon balloon-b">🎈</div><div className="floating-star">⭐</div>
+    </main>
+  );
+
   return (
-    <main className="site-shell">
-      <div className="topline"><div className="container topline-inner"><span><Sparkles size={14} /> التسجيل المبكر مفتوح الآن</span><a href="#join">احجز مقعدك قبل اكتمال المجموعة <ArrowUpLeft size={14} /></a></div></div>
-      <header className="site-header"><div className="container header-inner">
-        <a className="brand" href="#home" aria-label="خبرات - الصفحة الرئيسية"><span className="brand-mark"><BrainCircuit size={22} /></span><span><b>خبرات</b><small>AI EXPERIENCE</small></span></a>
-        <nav className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="التنقل الرئيسي">{navItems.map(([id, label]) => <ScrollLink key={id} href={`#${id}`} onClick={closeMenu}><span className={activeSection === id ? "active" : ""}>{label}</span></ScrollLink>)}</nav>
-        <div className="header-actions"><a className="text-action" href="#join">تواصل معنا <ArrowUpLeft size={16} /></a><a className="button button-small" href="#join">ابدأ رحلتك <ArrowLeft size={16} /></a></div>
-        <button className="mobile-menu" onClick={() => setMenuOpen((value) => !value)} aria-label="فتح القائمة">{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
-      </div></header>
-
-      <section className="hero" id="home"><div className="hero-image" aria-hidden="true" /><div className="hero-grid" aria-hidden="true" /><div className="container hero-content">
-        <div className="hero-copy reveal"><div className="eyebrow"><span className="pulse-dot" /> دورة خبرات الذكاء الاصطناعي</div><h1>لا تستخدم الذكاء الاصطناعي فقط.<br /><em>امتلك خبرته.</em></h1><p className="hero-lead">تجربة تعليمية عملية تنقلك من فضول البداية إلى قوة الإنجاز. تعلّم كيف تفكّر بذكاء، تعمل أسرع، وتصنع أثراً لا يختفي.</p><div className="hero-actions"><a className="button button-primary" href="#join">احجز مقعدك الآن <ArrowUpLeft size={18} /></a><a className="play-link" href="#journey"><span className="play-icon"><Play size={13} fill="currentColor" /></span> شاهد كيف نعمل</a></div><div className="hero-trust"><div className="avatar-stack"><span>م</span><span>ر</span><span>س</span><span>ن</span></div><span>انضم إلى <b>+2,400</b> متعلّم يصنع الفرق</span></div></div>
-        <div className="hero-aside reveal reveal-delay-2"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="hero-floating-card card-top"><span className="mini-icon cyan"><Zap size={15} /></span><span><b>+48%</b><small>إنتاجية أعلى</small></span></div><div className="hero-floating-card card-bottom"><span className="mini-icon violet"><WandSparkles size={15} /></span><span><b>01</b><small>مهارة تغيّر مسارك</small></span></div><div className="hero-chip"><span className="chip-line" /> مسار متكامل · 6 أسابيع</div></div>
-      </div><div className="scroll-cue"><span>اكتشف التجربة</span><div className="scroll-line" /></div></section>
-
-      <section className="marquee-section" aria-label="محاور التجربة"><div className="marquee-track"><span>THINK SMARTER</span><i>✦</i><span>CREATE FASTER</span><i>✦</i><span>LEAD BETTER</span><i>✦</i><span>THINK SMARTER</span><i>✦</i><span>CREATE FASTER</span></div></section>
-
-      <section className="intro section-light" id="why"><div className="container"><div className="section-heading split-heading reveal"><div><span className="section-kicker">لماذا خبرات؟</span><h2>لأن المستقبل<br /><span>لا ينتظر أحداً.</span></h2></div><div className="heading-side"><p>المعرفة وحدها لا تكفي. في خبرات، نبني لديك مزيجاً نادراً من الفهم، المهارة، والثقة لتصبح أنت نقطة التحوّل.</p><a className="under-link" href="#journey">اكتشف المنهج <ArrowUpLeft size={16} /></a></div></div><div className="stats-row reveal reveal-delay-1"><Stat value={2400} suffix="+" label="متعلّم حول العالم" /><Stat value={96} suffix="%" label="نسبة الرضا" /><Stat value={18} suffix="" label="خبير وممارس" /><div className="stat-manifesto"><Sparkles size={18} /><span>لا نتبع الموجة.<br /><b>نصنع اتجاهها.</b></span></div></div><div className="feature-grid"><article className="feature-card feature-main reveal reveal-delay-1"><div className="feature-number">01</div><div className="feature-icon"><BrainCircuit size={29} /></div><h3>فهم يتجاوز الأداة</h3><p>لا نعلّمك الضغط على الأزرار، بل نمنحك طريقة تفكير تساعدك على اختيار الأداة، صياغة السؤال، وصناعة النتيجة.</p><a className="circle-arrow" href="#journey"><ArrowUpLeft size={17} /></a></article><article className="feature-card feature-cyan reveal reveal-delay-2"><div className="feature-number">02</div><div className="feature-icon"><Layers3 size={29} /></div><h3>تطبيق يصنع العادة</h3><p>كل مفهوم يتحول إلى تجربة. كل تجربة تترك وراءها مهارة يمكنك استخدامها في عملك من اليوم الأول.</p><a className="circle-arrow" href="#journey"><ArrowUpLeft size={17} /></a></article><article className="feature-card feature-violet reveal reveal-delay-3"><div className="feature-number">03</div><div className="feature-icon"><Users size={29} /></div><h3>مجتمع يرفع سقفك</h3><p>تتعلّم وسط أشخاص طموحين، وتجد الدعم، الإلهام، والفرص التي تجعل رحلتك أكبر من شاشة.</p><a className="circle-arrow" href="#join"><ArrowUpLeft size={17} /></a></article></div></div></section>
-
-      <section className="journey section-dark" id="journey"><div className="dark-glow dark-glow-one" /><div className="dark-glow dark-glow-two" /><div className="container"><div className="section-heading split-heading light-heading reveal"><div><span className="section-kicker">منهج بخطوات واضحة</span><h2>رحلتك نحو<br /><span>الخبرة الحقيقية.</span></h2></div><div className="heading-side"><p>ستة أسابيع مصممة بعناية. من الفكرة الأولى، إلى نظام عمل يثبت أنك جاهز للمرحلة التالية.</p><div className="journey-meta"><span><Clock3 size={15} /> 6 أسابيع</span><span><Zap size={15} /> 24 ساعة تطبيق</span></div></div></div><div className="module-list">{modules.map(([number, title, description, tag], index) => <article className={`module-row reveal reveal-delay-${Math.min(index + 1, 3)}`} key={number}><span className="module-number">{number}</span><div className="module-title"><span>{tag}</span><h3>{title}</h3></div><p>{description}</p><a className="module-arrow" href="#join"><ArrowUpLeft size={19} /></a></article>)}</div><div className="journey-bottom reveal"><span>منهج يتطور معك</span><div className="progress-dots"><i className="filled" /><i className="filled" /><i className="filled" /><i /><i /></div><span>04 / 06</span></div></div></section>
-
-      <section className="practice section-light"><div className="container"><div className="practice-layout"><div className="practice-copy reveal"><span className="section-kicker">أكثر من دورة</span><h2>كل أسبوع،<br /><span>نسخة أقوى منك.</span></h2><p>نحن لا نراكم المعلومات. نبني لك تجربة تعلّم تشبه ورشة عمل حقيقية: فكرة، تجربة، ملاحظة، ثم إنجاز يمكنك أن تفتخر به.</p><a className="button button-dark" href="#join">اطّلع على التفاصيل <ArrowUpLeft size={17} /></a></div><div className="bento-grid reveal reveal-delay-2"><div className="bento-card bento-large"><div className="bento-label"><span className="mini-icon lime"><Sparkles size={14} /></span> عقلية النمو</div><h3>اسأل أفضل.<br />اصنع أكثر.</h3><div className="bento-orbit"><span /><span /><span /></div><div className="bento-footer">01 <span>الأساس الذي يبدأ منه كل شيء</span></div></div><div className="bento-card bento-stat"><strong>6×</strong><span>تطبيقات واقعية<br />داخل الدورة</span><ArrowUpLeft size={18} /></div><div className="bento-card bento-quote"><Quote size={26} /><p>“أكبر قفزة في إنتاجيتي لم تكن بسبب أداة جديدة، بل بسبب طريقة تفكير جديدة.”</p><span>— سارة، مؤسسة استوديو إبداعي</span></div></div></div></div></section>
-
-      <section className="testimonial section-dark"><div className="container testimonial-inner reveal"><div className="testimonial-mark"><Quote size={28} /></div><blockquote>“دخلت الدورة لأفهم الذكاء الاصطناعي، وخرجت وأنا أفهم <em>إمكانياتي</em> بشكل مختلف.”</blockquote><div className="testimonial-person"><div className="person-avatar">ن</div><div><b>ندى العتيبي</b><span>مصممة منتجات رقمية · دفعة 2025</span></div><div className="stars"><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /></div></div></div></section>
-
-      <section className="faq section-light" id="faq"><div className="container faq-layout"><div className="faq-intro reveal"><span className="section-kicker">أسئلة تستحق إجابة</span><h2>وضوح من<br /><span>البداية.</span></h2><p>إذا لم تجد إجابتك هنا، فريقنا جاهز يسمعك.</p><a className="under-link" href="mailto:hello@khibrat.ai">تحدث مع فريقنا <ArrowUpLeft size={16} /></a></div><div className="faq-list reveal reveal-delay-2">{faqs.map(([question, answer], index) => <div className={`faq-item ${openFaq === index ? "open" : ""}`} key={question}><button onClick={() => setOpenFaq(openFaq === index ? -1 : index)}><span>0{index + 1}</span><b>{question}</b><ChevronDown size={19} /></button><div className="faq-answer"><p>{answer}</p></div></div>)}</div></div></section>
-
-      <section className="join section-dark" id="join"><div className="join-pattern" aria-hidden="true" /><div className="container join-inner reveal"><div><span className="section-kicker">الخطوة الأولى تبدأ هنا</span><h2>جاهز تبني<br /><em>خبرتك؟</em></h2><p>اترك بريدك، وسنرسل لك تفاصيل الدورة والدفعة القادمة قبل الجميع.</p></div><form className="join-form" onSubmit={handleSubmit}>{formSent ? <div className="form-success"><span className="success-icon"><Check size={20} /></span><b>وصل طلبك بنجاح.</b><span>سنعود إليك قريباً بكل التفاصيل.</span></div> : <><label htmlFor="email">البريد الإلكتروني</label><div className="input-wrap"><input id="email" type="email" placeholder="name@email.com" value={email} onChange={(event) => setEmail(event.target.value)} required /><button type="submit" aria-label="إرسال البريد"><Send size={18} /></button></div><small>لن نرسل لك إلا ما يستحق وقتك. يمكنك الانسحاب في أي وقت.</small></>}</form></div></section>
-
-      <footer className="site-footer"><div className="container footer-top"><a className="brand" href="#home"><span className="brand-mark"><BrainCircuit size={22} /></span><span><b>خبرات</b><small>AI EXPERIENCE</small></span></a><p>نصنع العقول التي تصنع المستقبل.</p><div className="socials"><a href="#join" aria-label="LinkedIn"><Linkedin size={16} /></a><a href="#join" aria-label="Twitter"><Twitter size={16} /></a><a href="mailto:hello@khibrat.ai" aria-label="البريد الإلكتروني"><Send size={16} /></a></div></div><div className="container footer-bottom"><span>© 2025 خبرات. جميع الحقوق محفوظة.</span><span>صُمّم بعناية للعقول الفضولية <Sparkles size={14} /></span></div></footer>
-      <a className="mobile-sticky-cta" href="#join">ابدأ رحلتك الآن <ArrowUpLeft size={17} /></a>
+    <main className="game-shell game-shell-active" dir="rtl">
+      <div className="game-backdrop" />
+      <header className="game-topbar"><div className="mini-brand"><span>✎</span><strong>حُروفي</strong><small>مغامرة الكلمات</small></div><div className="progress-wrap"><div className="progress-label"><span>الجولة {round}</span><b>{score} نقطة</b></div><div className="progress-track"><span style={{ width: `${Math.min(100, ((round - 1) % 10) * 10 + 10)}%` }} /></div></div><button className="sound-button" onClick={speak} aria-label="استمع للتعليمات"><Volume2 size={20} /></button></header>
+      <section className="game-layout">
+        <aside className="mascot-side"><div className="speech-bubble">هيا يا <b>{name}</b>!<br />أرني كلمة جميلة ✨</div><img src="/manus-storage/arabic-letter-game-mascot_5fc9c4e4.png" alt="بومة تساعد الطفل" /><div className="side-stats"><span>⭐ {score}</span><span>🔥 {Math.max(0, round - 1)}</span></div></aside>
+        <section className="play-panel glass-card">
+          <div className="panel-heading"><div><span className="eyebrow"><Sparkles size={15} /> تحدي الحرف</span><h1>اكتب كلمة تبدأ بحرف...</h1></div><div className="round-stars"><Star fill="#ffd166" /><Star fill="#ffd166" /><Star /></div></div>
+          <div className="letter-orb"><div className="orb-ring" /><strong>{currentLetter}</strong><small>حرف الجولة</small></div>
+          <div className="answer-zone"><label htmlFor="answer">كلمتك الرائعة</label><div className={`answer-field ${feedback}`}><input id="answer" value={answer} onChange={(event) => { setAnswer(event.target.value); setFeedback("idle"); }} onKeyDown={(event) => event.key === "Enter" && checkAnswer()} placeholder={`اكتب كلمة بحرف ${currentLetter}...`} autoComplete="off" /><button onClick={() => setAnswer("")} aria-label="مسح الكلمة"><RotateCcw size={18} /></button></div></div>
+          <div className="virtual-keyboard">{keyboardRows.map((row, index) => <div className="key-row" key={index}>{row.map((key) => <button key={key} className={key === currentLetter ? "key current-key" : "key"} onClick={() => addKey(key)}>{key}</button>)}{index === keyboardRows.length - 1 && <button className="key delete-key" onClick={() => setAnswer((value) => value.slice(0, -1))}>⌫</button>}</div>)}</div>
+          {feedback === "wrong" && <div className="feedback wrong"><span><X size={18} /></span><div><b>محاولة جميلة!</b><small>ابحث عن كلمة تبدأ بحرف {currentLetter} وحاول مرة أخرى.</small></div></div>}
+          {feedback === "idle" && <p className="helper-text">يمكنك استخدام لوحة المفاتيح أو الأزرار الملونة 💛</p>}
+          {feedback === "success" && earnedWord && <div className="success-card" style={{ background: `linear-gradient(135deg, ${earnedWord.color}, #fff6e8)` }}><div className="confetti-layer">{balloons.map((balloon, index) => <span key={index} style={{ "--i": index } as CSSProperties}>{balloon}</span>)}</div><div className="word-emoji">{earnedWord.emoji}</div><div><span>يا سلام يا {name}!</span><b>{earnedWord.word}</b><small>{earnedWord.hint}</small></div><div className="check-badge"><Check size={22} /></div></div>}
+          {feedback !== "success" ? <button className="check-button" onClick={checkAnswer}>تحقق من إجابتي <Check size={20} /></button> : <button className="next-button" onClick={nextRound}>الحرف التالي <ArrowLeft size={20} /></button>}
+        </section>
+      </section>
+      <footer className="game-footer"><span><PartyPopper size={16} /> كل إجابة صحيحة = نجمة جديدة</span><span>أنت بطل الحروف يا {name}!</span></footer>
     </main>
   );
 }
