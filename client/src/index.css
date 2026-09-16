@@ -41,7 +41,7 @@ button { border:0; }
 .button-dark:hover { background:#243650; transform:translateY(-3px); }
 .mobile-menu { display:none; background:transparent; color:white; padding:8px; }
 .hero { position:relative; min-height:720px; padding-top:115px; display:flex; align-items:center; color:white; background:#081123; isolation:isolate; }
-.hero-image { position:absolute; z-index:-3; inset:0; background-image:linear-gradient(90deg,rgba(8,17,35,.96) 0%,rgba(8,17,35,.79) 42%,rgba(8,17,35,.18) 100%),url('/manus-storage/ai-experience-hero_1cdd8425.jpg'); background-position:center; background-size:cover; opacity:.97; }
+.hero-image { position:absolute; z-index:-3; inset:0; background-image:linear-gradient(90deg,rgba(8,17,35,.96) 0%,rgba(8,17,35,.79) 42%,rgba(8,17,35,.18) 100%),url('/assets/ai-experience-hero.jpg'); background-position:center; background-size:cover; opacity:.97; }
 .hero-grid { position:absolute; z-index:-2; inset:0; opacity:.22; background-image:linear-gradient(rgba(126,233,231,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(126,233,231,.08) 1px,transparent 1px); background-size:72px 72px; mask-image:linear-gradient(to right,black,transparent 80%); }
 .hero::after { content:""; position:absolute; z-index:-1; inset:0; background:radial-gradient(circle at 68% 52%,rgba(155,140,255,.13),transparent 28%),linear-gradient(180deg,transparent 75%,#0b1220 100%); }
 .hero-content { display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:30px; min-height:575px; }
