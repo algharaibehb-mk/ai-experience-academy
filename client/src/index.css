@@ -51,3 +51,29 @@ button { cursor: pointer; border: 0; }
 @keyframes bob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(2deg); } } @keyframes float { 0%,100% { transform: translateY(0) rotate(12deg); } 50% { transform: translateY(-25px) rotate(-8deg); } } @keyframes twinkle { from { opacity: .25; } to { opacity: .75; } } @keyframes shake { 0%,100% { transform: translateX(0); } 30% { transform: translateX(-7px); } 70% { transform: translateX(7px); } } @keyframes fall { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(130px) rotate(220deg); opacity: 0; } }
 @media (max-width: 760px) { .welcome-card { min-height: 650px; padding: 25px 22px; }.welcome-art { height: 150px; }.welcome-art img { height: 210px; width: 210px; }.welcome-footer { gap: 10px; font-size: .66rem; }.game-shell-active { padding: 15px 13px 18px; }.game-topbar { gap: 10px; }.mini-brand { min-width: auto; }.mini-brand small { display: none; }.progress-wrap { width: 45vw; }.game-layout { grid-template-columns: 1fr; margin-top: 24px; gap: 10px; }.mascot-side { display: none; }.play-panel { min-height: auto; padding: 20px 15px 19px; }.letter-orb { width: 145px; height: 145px; border-radius: 38px; }.letter-orb strong { font-size: 5.5rem; }.orb-ring { border-radius: 45px; }.key { height: 37px; font-size: .9rem; }.panel-heading h1 { font-size: 1.28rem; }.round-stars svg { width: 18px; }.game-footer { flex-direction: column; align-items: center; gap: 4px; margin-top: 15px; }.floating-balloon { font-size: 2.2rem; }.balloon-a { top: 8%; }.balloon-b { bottom: 6%; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+
+/* Purple Dream theme override */
+:root { background: #17102f; }
+.game-shell { background: #17102f; }
+.game-shell::after { background: radial-gradient(circle at 50% 20%, rgba(180, 112, 255, .24), transparent 34%), linear-gradient(180deg, rgba(24, 13, 67, .91), rgba(23, 16, 47, .98)); }
+.sky-glow { background: radial-gradient(circle, rgba(188, 112, 255, .22), transparent 66%); }
+.glass-card { background: linear-gradient(150deg, rgba(57, 35, 111, .86), rgba(27, 19, 71, .84)); border-color: rgba(218, 173, 255, .32); box-shadow: 0 30px 90px rgba(10, 4, 35, .6), inset 0 1px rgba(255,255,255,.16); }
+.brand-dot { background: linear-gradient(135deg, #e0a7ff, #8f6cff); color: #26154d; box-shadow: 0 8px 20px #a76cff50; }
+.eyebrow { color: #d7a6ff; }
+.name-field { background: rgba(17, 8, 52, .52); border-color: rgba(213, 163, 255, .38); color: #d9a8ff; }
+.primary-button, .check-button, .next-button { color: #271341; background: linear-gradient(135deg, #e4b0ff, #a978ff); box-shadow: 0 12px 25px rgba(167, 108, 255, .3); }
+.primary-button:hover, .check-button:hover, .next-button:hover { box-shadow: 0 18px 32px rgba(167, 108, 255, .44); }
+.mini-brand span { background: #d59eff; color: #281550; }
+.mini-brand small { color: #d6a7ff; }
+.progress-track span { background: linear-gradient(90deg, #ff9a9e, #c792ff); }
+.sound-button { background: rgba(196, 133, 255, .14); color: #d9a8ff; border-color: rgba(213, 163, 255, .28); }
+.sound-button:hover { background: rgba(196, 133, 255, .26); }
+.letter-orb { background: radial-gradient(circle at 30% 18%, #d89bff, #785ed3 65%, #432477); box-shadow: 0 18px 40px rgba(168, 108, 255, .24), inset 0 0 0 2px rgba(255,255,255,.25); }
+.orb-ring { border-color: rgba(214,167,255,.32); }
+.answer-field { background: rgba(12, 6, 39, .5); border-color: rgba(214, 167, 255, .38); }
+.answer-field:focus-within { border-color: #d9a8ff; box-shadow: 0 0 0 4px rgba(196, 133, 255, .13); }
+.answer-field button { color: #bda5d8; }
+.key { background: linear-gradient(145deg, rgba(171, 112, 240, .85), rgba(92, 69, 180, .86)); box-shadow: inset 0 -3px rgba(52, 24, 117, .4), 0 5px 7px rgba(3, 10, 40, .15); }
+.helper-text { color: #a99bc4; }
+
+@media (max-width: 760px) { .glass-card { background: linear-gradient(150deg, rgba(57, 35, 111, .91), rgba(27, 19, 71, .9)); } }
