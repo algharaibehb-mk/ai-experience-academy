@@ -77,3 +77,27 @@ button { cursor: pointer; border: 0; }
 .helper-text { color: #a99bc4; }
 
 @media (max-width: 760px) { .glass-card { background: linear-gradient(150deg, rgba(57, 35, 111, .91), rgba(27, 19, 71, .9)); } }
+
+/* Mobile-first interaction polish */
+html { background: #17102f; }
+body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.game-shell { min-height: 100svh; padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+.name-field input, .answer-field input { font-size: 16px; }
+@media (max-width: 760px) {
+  .welcome-shell { min-height: 100svh; padding: max(18px, env(safe-area-inset-top)) 14px max(24px, env(safe-area-inset-bottom)); }
+  .welcome-card { width: 100%; min-height: min(700px, calc(100svh - 36px)); border-radius: 28px; }
+  .game-shell-active { min-height: 100svh; padding-top: max(14px, env(safe-area-inset-top)); padding-left: max(13px, env(safe-area-inset-left)); padding-right: max(13px, env(safe-area-inset-right)); }
+  .key { min-height: 42px; height: 42px; }
+  .primary-button, .check-button, .next-button { min-height: 56px; }
+}
+@media (max-width: 390px) {
+  .welcome-card { padding-inline: 16px; }
+  .welcome-art { height: 135px; }
+  .welcome-art img { width: 190px; height: 190px; }
+  .welcome-card h1 { font-size: 2.15rem; }
+  .welcome-copy { font-size: .87rem; }
+  .welcome-footer { gap: 7px; font-size: .61rem; }
+  .key-row { gap: 5px; }
+  .key { min-height: 40px; height: 40px; font-size: .84rem; border-radius: 9px; }
+}

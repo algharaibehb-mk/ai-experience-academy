@@ -1,0 +1,12 @@
+{
+  "name": "حُروفي | لعبة الحروف العربية",
+  "short_name": "حُروفي",
+  "description": "لعبة عربية مرحة يتعلم فيها الأطفال كتابة الكلمات من خلال الحروف.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#17102f",
+  "theme_color": "#8f6cff",
+  "dir": "rtl",
+  "lang": "ar",
+  "orientation": "portrait-primary"
+}
